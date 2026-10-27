@@ -23,6 +23,10 @@ public class ScoreService {
         return studentRepository.findAll();
     }
 
+    public List<Course> listCourses() {
+        return studentRepository.findAllCourses();
+    }
+
     public List<ScoreView> listScoresByStudentNo(String studentNo) {
         List<ScoreView> result = new ArrayList<>();
         for (Score score : studentRepository.findScoresByStudentNo(studentNo)) {

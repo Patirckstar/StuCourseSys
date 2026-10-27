@@ -50,6 +50,12 @@ public class StudentRepository {
         return result;
     }
 
+    public List<Course> findAllCourses() {
+        List<Course> result = new ArrayList<>(courses);
+        result.sort(Comparator.comparing(Course::getCourseId));
+        return result;
+    }
+
     public Student findByStudentNo(String studentNo) {
         return students.stream()
                 .filter(student -> student.getStudentNo().equals(studentNo))
