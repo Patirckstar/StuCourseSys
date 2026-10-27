@@ -1,0 +1,20 @@
+# ---------- documents：仅保留两份 docx ----------
+/documents/*
+!/documents/实验指导书_SpringBoot程序设计.docx
+!/documents/需求文档_学生成绩查询系统.docx
+
+# ---------- Java / Maven ----------
+target/
+*.class
+*.jar
+*.war
+
+# ---------- IntelliJ IDEA ----------
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ---------- 日志 ----------
+*.log
