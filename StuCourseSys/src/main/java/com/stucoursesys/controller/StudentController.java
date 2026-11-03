@@ -1,5 +1,6 @@
 package com.stucoursesys.controller;
 
+import com.stucoursesys.common.ApiResponse;
 import com.stucoursesys.dto.ScoreView;
 import com.stucoursesys.entity.Student;
 import com.stucoursesys.service.ScoreService;
@@ -21,12 +22,12 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> listStudents() {
-        return scoreService.listStudents();
+    public ApiResponse<List<Student>> listStudents() {
+        return ApiResponse.ok(scoreService.listStudents());
     }
 
     @GetMapping("/{studentNo}/scores")
-    public List<ScoreView> listScores(@PathVariable("studentNo") String studentNo) {
-        return scoreService.listScoresByStudentNo(studentNo);
+    public ApiResponse<List<ScoreView>> listScores(@PathVariable("studentNo") String studentNo) {
+        return ApiResponse.ok(scoreService.listScoresByStudentNo(studentNo));
     }
 }

@@ -2,6 +2,8 @@ package com.stucoursesys.entity;
 
 public class Score {
 
+    private long id;
+
     private String studentNo;
 
     private String courseId;
@@ -11,10 +13,19 @@ public class Score {
     public Score() {
     }
 
-    public Score(String studentNo, String courseId, int score) {
+    public Score(long id, String studentNo, String courseId, int score) {
+        this.id = id;
         this.studentNo = studentNo;
         this.courseId = courseId;
         this.score = score;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getStudentNo() {

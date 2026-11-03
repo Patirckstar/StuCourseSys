@@ -1,5 +1,6 @@
 package com.stucoursesys.controller;
 
+import com.stucoursesys.common.ApiResponse;
 import com.stucoursesys.entity.Course;
 import com.stucoursesys.service.ScoreService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<Course> listCourses() {
-        return scoreService.listCourses();
+    public ApiResponse<List<Course>> listCourses() {
+        return ApiResponse.ok(scoreService.listCourses());
     }
 }

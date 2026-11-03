@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class StudentRepository {
@@ -17,7 +18,8 @@ public class StudentRepository {
             new Student("2023010002", "李婷", "计算机2301"),
             new Student("2023010003", "王浩", "计算机2301"),
             new Student("2023010004", "陈静", "计算机2302"),
-            new Student("2023010005", "刘洋", "计算机2302")
+            new Student("2023010005", "刘洋", "计算机2302"),
+            new Student("2023010006", "派大星", "软工2302")
     ));
 
     private final List<Course> courses = new ArrayList<>(List.of(
@@ -27,22 +29,25 @@ public class StudentRepository {
     ));
 
     private final List<Score> scores = new ArrayList<>(List.of(
-            new Score("2023010001", "C001", 92),
-            new Score("2023010001", "C002", 85),
-            new Score("2023010001", "C003", 78),
-            new Score("2023010002", "C001", 88),
-            new Score("2023010002", "C002", 91),
-            new Score("2023010002", "C003", 86),
-            new Score("2023010003", "C001", 74),
-            new Score("2023010003", "C002", 68),
-            new Score("2023010003", "C003", 80),
-            new Score("2023010004", "C001", 95),
-            new Score("2023010004", "C002", 89),
-            new Score("2023010004", "C003", 92),
-            new Score("2023010005", "C001", 61),
-            new Score("2023010005", "C002", 72),
-            new Score("2023010005", "C003", 65)
+            new Score(1, "2023010001", "C001", 92),
+            new Score(2, "2023010001", "C002", 85),
+            new Score(3, "2023010001", "C003", 78),
+            new Score(4, "2023010002", "C001", 88),
+            new Score(5, "2023010002", "C002", 91),
+            new Score(6, "2023010002", "C003", 86),
+            new Score(7, "2023010003", "C001", 74),
+            new Score(8, "2023010003", "C002", 68),
+            new Score(9, "2023010003", "C003", 80),
+            new Score(10, "2023010004", "C001", 95),
+            new Score(11, "2023010004", "C002", 89),
+            new Score(12, "2023010004", "C003", 92),
+            new Score(13, "2023010005", "C001", 61),
+            new Score(14, "2023010005", "C002", 72),
+            new Score(15, "2023010005", "C003", 65),
+            new Score(16, "2023010006", "C001", 88)
     ));
+
+    private final AtomicLong idGenerator = new AtomicLong(15);
 
     public List<Student> findAll() {
         List<Student> result = new ArrayList<>(students);
@@ -74,5 +79,38 @@ public class StudentRepository {
         return scores.stream()
                 .filter(score -> score.getStudentNo().equals(studentNo))
                 .toList();
+    }
+
+    public Score findScoreById(long id) {
+        return scores.stream()
+                .filter(score -> score.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Score findScoreByStudentNoAndCourseId(String studentNo, String courseId) {
+        return scores.stream()
+                .filter(score -> score.getStudentNo().equals(studentNo) && score.getCourseId().equals(courseId))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Score save(String studentNo, String courseId, int score) {
+        Score created = new Score(idGenerator.incrementAndGet(), studentNo, courseId, score);
+        scores.add(created);
+        return created;
+    }
+
+    public Score updateScore(long id, int score) {
+        Score target = findScoreById(id);
+        if (target == null) {
+            return null;
+        }
+        target.setScore(score);
+        return target;
+    }
+
+    public boolean deleteScore(long id) {
+        return scores.removeIf(score -> score.getId() == id);
     }
 }
