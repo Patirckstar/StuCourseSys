@@ -1,7 +1,6 @@
 # ---------- documents：仅保留两份 docx ----------
 /documents/*
-!/documents/实验指导书_SpringBoot程序设计.docx
-!/documents/需求文档_学生成绩查询系统.docx
+/document2/*
 
 # ---------- Java / Maven ----------
 target/
