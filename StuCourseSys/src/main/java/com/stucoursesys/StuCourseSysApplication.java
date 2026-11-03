@@ -23,6 +23,7 @@ public class StuCourseSysApplication implements CommandLineRunner {
         System.out.println("  学生列表      " + baseUrl + "/api/students");
         System.out.println("  成绩查询      " + baseUrl + "/api/students/2023010001/scores");
         System.out.println("  空结果验证    " + baseUrl + "/api/students/9999999999/scores");
+        System.out.println("  课程列表      " + baseUrl + "/api/courses");
         System.out.println();
     }
 }
