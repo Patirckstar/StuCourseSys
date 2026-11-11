@@ -3,9 +3,11 @@ package com.stucoursesys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@MapperScan("com.stucoursesys.mapper")
 public class StuCourseSysApplication implements CommandLineRunner {
 
     @Value("${server.port:8080}")
