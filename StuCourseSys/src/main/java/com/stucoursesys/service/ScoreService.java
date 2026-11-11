@@ -1,6 +1,7 @@
 package com.stucoursesys.service;
 
 import com.stucoursesys.common.ErrorCode;
+import com.stucoursesys.dto.CourseStatistics;
 import com.stucoursesys.dto.ScoreCreateRequestDTO;
 import com.stucoursesys.dto.ScoreUpdateRequestDTO;
 import com.stucoursesys.dto.ScoreView;
@@ -13,7 +14,9 @@ import com.stucoursesys.mapper.ScoreMapper;
 import com.stucoursesys.mapper.StudentMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,6 +46,13 @@ public class ScoreService {
         return scoreMapper.findByStudentNo(studentNo, courseId, minScore);
     }
 
+    public CourseStatistics statistics(String courseId) {
+        if (courseMapper.findByCourseId(courseId) == null) {
+            throw new BusinessException(ErrorCode.COURSE_NOT_FOUND, HttpStatus.NOT_FOUND, ErrorCode.MSG_COURSE_NOT_FOUND);
+        }
+        return scoreMapper.statistics(courseId);
+    }
+
     public Score create(ScoreCreateRequestDTO request) {
         if (studentMapper.findByStudentNo(request.getStudentNo()) == null) {
             throw new BusinessException(ErrorCode.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND, ErrorCode.MSG_STUDENT_NOT_FOUND);
@@ -59,6 +69,16 @@ public class ScoreService {
         score.setScore(request.getScore());
         scoreMapper.insert(score);
         return score;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public List<Long> batchCreate(List<ScoreCreateRequestDTO> requests) {
+        List<Long> ids = new ArrayList<>();
+        for (ScoreCreateRequestDTO request : requests) {
+            Score created = create(request);
+            ids.add(created.getId());
+        }
+        return ids;
     }
 
     public Score update(long id, ScoreUpdateRequestDTO request) {

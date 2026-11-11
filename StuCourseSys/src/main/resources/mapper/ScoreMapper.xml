@@ -47,4 +47,18 @@
         WHERE id = #{id}
     </delete>
 
+    <select id="statistics" resultType="com.stucoursesys.dto.CourseStatistics">
+        SELECT c.course_id,
+               c.course_name,
+               COUNT(s.id) AS count,
+               ROUND(AVG(s.score), 1) AS average,
+               MAX(s.score) AS highest,
+               MIN(s.score) AS lowest,
+               ROUND(SUM(CASE WHEN s.score &gt;= 60 THEN 1 ELSE 0 END) / COUNT(s.id), 2) AS pass_rate
+        FROM course c
+        LEFT JOIN score s ON s.course_id = c.course_id
+        WHERE c.course_id = #{courseId}
+        GROUP BY c.course_id, c.course_name
+    </select>
+
 </mapper>

@@ -1,6 +1,7 @@
 package com.stucoursesys.controller;
 
 import com.stucoursesys.common.ApiResponse;
+import com.stucoursesys.dto.ScoreBatchRequestDTO;
 import com.stucoursesys.dto.ScoreCreateRequestDTO;
 import com.stucoursesys.dto.ScoreUpdateRequestDTO;
 import com.stucoursesys.entity.Score;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/scores")
 public class ScoreController {
@@ -30,6 +33,12 @@ public class ScoreController {
     public ResponseEntity<ApiResponse<Score>> create(@Valid @RequestBody ScoreCreateRequestDTO request) {
         Score created = scoreService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(created));
+    }
+
+    @PostMapping("/batch")
+    public ResponseEntity<ApiResponse<List<Long>>> batchCreate(@Valid @RequestBody ScoreBatchRequestDTO request) {
+        List<Long> ids = scoreService.batchCreate(request.getScores());
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(ids));
     }
 
     @PutMapping("/{id}")

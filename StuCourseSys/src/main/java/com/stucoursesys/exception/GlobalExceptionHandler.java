@@ -4,6 +4,7 @@ import com.stucoursesys.common.ApiResponse;
 import com.stucoursesys.common.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -32,6 +33,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleBadRequest(Exception e) {
         return ResponseEntity.badRequest()
                 .body(ApiResponse.fail(ErrorCode.VALIDATION_FAILED, ErrorCode.MSG_VALIDATION_FAILED));
+    }
+
+    @ExceptionHandler(DuplicateKeyException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDuplicateKey(DuplicateKeyException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.fail(ErrorCode.DUPLICATE_SCORE, ErrorCode.MSG_DUPLICATE_SCORE));
     }
 
     @ExceptionHandler(BusinessException.class)

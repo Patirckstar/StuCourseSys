@@ -1,9 +1,11 @@
 package com.stucoursesys.controller;
 
 import com.stucoursesys.common.ApiResponse;
+import com.stucoursesys.dto.CourseStatistics;
 import com.stucoursesys.entity.Course;
 import com.stucoursesys.service.ScoreService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +24,10 @@ public class CourseController {
     @GetMapping
     public ApiResponse<List<Course>> listCourses() {
         return ApiResponse.ok(scoreService.listCourses());
+    }
+
+    @GetMapping("/{courseId}/statistics")
+    public ApiResponse<CourseStatistics> statistics(@PathVariable("courseId") String courseId) {
+        return ApiResponse.ok(scoreService.statistics(courseId));
     }
 }

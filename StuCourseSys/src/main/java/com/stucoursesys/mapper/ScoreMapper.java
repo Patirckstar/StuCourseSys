@@ -1,5 +1,6 @@
 package com.stucoursesys.mapper;
 
+import com.stucoursesys.dto.CourseStatistics;
 import com.stucoursesys.dto.ScoreView;
 import com.stucoursesys.entity.Score;
 import org.apache.ibatis.annotations.Param;
@@ -22,4 +23,6 @@ public interface ScoreMapper {
     int updateScore(@Param("id") long id, @Param("score") int score);
 
     int deleteById(@Param("id") long id);
+
+    CourseStatistics statistics(@Param("courseId") String courseId);
 }
