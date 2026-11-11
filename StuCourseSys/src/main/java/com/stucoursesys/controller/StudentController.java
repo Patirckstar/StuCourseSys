@@ -7,6 +7,7 @@ import com.stucoursesys.service.ScoreService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,7 +28,10 @@ public class StudentController {
     }
 
     @GetMapping("/{studentNo}/scores")
-    public ApiResponse<List<ScoreView>> listScores(@PathVariable("studentNo") String studentNo) {
-        return ApiResponse.ok(scoreService.listScoresByStudentNo(studentNo));
+    public ApiResponse<List<ScoreView>> listScores(
+            @PathVariable("studentNo") String studentNo,
+            @RequestParam(value = "courseId", required = false) String courseId,
+            @RequestParam(value = "minScore", required = false) Integer minScore) {
+        return ApiResponse.ok(scoreService.listScoresByStudentNo(studentNo, courseId, minScore));
     }
 }

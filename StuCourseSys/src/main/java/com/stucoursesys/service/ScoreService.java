@@ -8,71 +8,68 @@ import com.stucoursesys.entity.Course;
 import com.stucoursesys.entity.Score;
 import com.stucoursesys.entity.Student;
 import com.stucoursesys.exception.BusinessException;
-import com.stucoursesys.repository.StudentRepository;
+import com.stucoursesys.mapper.CourseMapper;
+import com.stucoursesys.mapper.ScoreMapper;
+import com.stucoursesys.mapper.StudentMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ScoreService {
 
-    private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
 
-    public ScoreService(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
+    private final CourseMapper courseMapper;
+
+    private final ScoreMapper scoreMapper;
+
+    public ScoreService(StudentMapper studentMapper, CourseMapper courseMapper, ScoreMapper scoreMapper) {
+        this.studentMapper = studentMapper;
+        this.courseMapper = courseMapper;
+        this.scoreMapper = scoreMapper;
     }
 
     public List<Student> listStudents() {
-        return studentRepository.findAll();
+        return studentMapper.findAll();
     }
 
     public List<Course> listCourses() {
-        return studentRepository.findAllCourses();
+        return courseMapper.findAll();
     }
 
-    public List<ScoreView> listScoresByStudentNo(String studentNo) {
-        List<ScoreView> result = new ArrayList<>();
-        for (Score score : studentRepository.findScoresByStudentNo(studentNo)) {
-            Course course = studentRepository.findCourseByCourseId(score.getCourseId());
-            if (course != null) {
-                result.add(new ScoreView(
-                        course.getCourseId(),
-                        course.getCourseName(),
-                        course.getCredit(),
-                        score.getScore()
-                ));
-            }
-        }
-        return result;
+    public List<ScoreView> listScoresByStudentNo(String studentNo, String courseId, Integer minScore) {
+        return scoreMapper.findByStudentNo(studentNo, courseId, minScore);
     }
 
     public Score create(ScoreCreateRequestDTO request) {
-//        throw new RuntimeException("临时测试 500，验证后立即删除");
-
-        if (studentRepository.findByStudentNo(request.getStudentNo()) == null) {
+        if (studentMapper.findByStudentNo(request.getStudentNo()) == null) {
             throw new BusinessException(ErrorCode.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND, ErrorCode.MSG_STUDENT_NOT_FOUND);
         }
-        if (studentRepository.findCourseByCourseId(request.getCourseId()) == null) {
+        if (courseMapper.findByCourseId(request.getCourseId()) == null) {
             throw new BusinessException(ErrorCode.COURSE_NOT_FOUND, HttpStatus.NOT_FOUND, ErrorCode.MSG_COURSE_NOT_FOUND);
         }
-        if (studentRepository.findScoreByStudentNoAndCourseId(request.getStudentNo(), request.getCourseId()) != null) {
+        if (scoreMapper.countByStudentAndCourse(request.getStudentNo(), request.getCourseId()) > 0) {
             throw new BusinessException(ErrorCode.DUPLICATE_SCORE, HttpStatus.CONFLICT, ErrorCode.MSG_DUPLICATE_SCORE);
         }
-        return studentRepository.save(request.getStudentNo(), request.getCourseId(), request.getScore());
+        Score score = new Score();
+        score.setStudentNo(request.getStudentNo());
+        score.setCourseId(request.getCourseId());
+        score.setScore(request.getScore());
+        scoreMapper.insert(score);
+        return score;
     }
 
     public Score update(long id, ScoreUpdateRequestDTO request) {
-        Score updated = studentRepository.updateScore(id, request.getScore());
-        if (updated == null) {
+        if (scoreMapper.updateScore(id, request.getScore()) == 0) {
             throw new BusinessException(ErrorCode.SCORE_NOT_FOUND, HttpStatus.NOT_FOUND, ErrorCode.MSG_SCORE_NOT_FOUND);
         }
-        return updated;
+        return scoreMapper.findById(id);
     }
 
     public void delete(long id) {
-        if (!studentRepository.deleteScore(id)) {
+        if (scoreMapper.deleteById(id) == 0) {
             throw new BusinessException(ErrorCode.SCORE_NOT_FOUND, HttpStatus.NOT_FOUND, ErrorCode.MSG_SCORE_NOT_FOUND);
         }
     }

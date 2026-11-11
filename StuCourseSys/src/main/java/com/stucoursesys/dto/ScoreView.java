@@ -2,6 +2,10 @@ package com.stucoursesys.dto;
 
 public class ScoreView {
 
+    private long id;
+
+    private String studentNo;
+
     private String courseId;
 
     private String courseName;
@@ -13,11 +17,20 @@ public class ScoreView {
     public ScoreView() {
     }
 
-    public ScoreView(String courseId, String courseName, double credit, int score) {
-        this.courseId = courseId;
-        this.courseName = courseName;
-        this.credit = credit;
-        this.score = score;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getStudentNo() {
+        return studentNo;
+    }
+
+    public void setStudentNo(String studentNo) {
+        this.studentNo = studentNo;
     }
 
     public String getCourseId() {
