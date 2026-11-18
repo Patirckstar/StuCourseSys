@@ -2,6 +2,7 @@
 /documents/*
 /document2/*
 /document3/*
+/document4/*
 
 # ---------- Java / Maven ----------
 target/

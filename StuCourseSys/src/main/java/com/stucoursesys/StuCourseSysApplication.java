@@ -21,11 +21,17 @@ public class StuCourseSysApplication implements CommandLineRunner {
     public void run(String... args) {
         String baseUrl = "http://localhost:" + port;
         System.out.println();
-        System.out.println("接口地址（控制台中可直接点击）：");
-        System.out.println("  学生列表      " + baseUrl + "/api/students");
-        System.out.println("  成绩查询      " + baseUrl + "/api/students/2023010001/scores");
-        System.out.println("  空结果验证    " + baseUrl + "/api/students/9999999999/scores");
-        System.out.println("  课程列表      " + baseUrl + "/api/courses");
+        System.out.println("接口地址（控制台中可直接点击，或用浏览器打开）：");
+        System.out.println("  学生列表          " + baseUrl + "/api/students");
+        System.out.println("  课程列表          " + baseUrl + "/api/courses");
+        System.out.println("  成绩查询          " + baseUrl + "/api/students/2023010001/scores");
+        System.out.println("  按课程筛选        " + baseUrl + "/api/students/2023010001/scores?courseId=C001");
+        System.out.println("  按最低分筛选      " + baseUrl + "/api/students/2023010001/scores?minScore=80");
+        System.out.println("  组合筛选          " + baseUrl + "/api/students/2023010001/scores?courseId=C001&minScore=90");
+        System.out.println("  空结果验证        " + baseUrl + "/api/students/9999999999/scores");
+        System.out.println("  课程统计 C001     " + baseUrl + "/api/courses/C001/statistics");
+        System.out.println("  课程统计 C002     " + baseUrl + "/api/courses/C002/statistics");
+        System.out.println("  课程统计 C003     " + baseUrl + "/api/courses/C003/statistics");
         System.out.println();
     }
 }
