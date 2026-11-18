@@ -5,6 +5,7 @@ import com.stucoursesys.dto.ScoreBatchRequestDTO;
 import com.stucoursesys.dto.ScoreCreateRequestDTO;
 import com.stucoursesys.dto.ScoreUpdateRequestDTO;
 import com.stucoursesys.entity.Score;
+import com.stucoursesys.security.RequireRole;
 import com.stucoursesys.service.ScoreService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -29,23 +30,27 @@ public class ScoreController {
         this.scoreService = scoreService;
     }
 
+    @RequireRole({"TEACHER", "ADMIN"})
     @PostMapping
     public ResponseEntity<ApiResponse<Score>> create(@Valid @RequestBody ScoreCreateRequestDTO request) {
         Score created = scoreService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(created));
     }
 
+    @RequireRole({"TEACHER", "ADMIN"})
     @PostMapping("/batch")
     public ResponseEntity<ApiResponse<List<Long>>> batchCreate(@Valid @RequestBody ScoreBatchRequestDTO request) {
         List<Long> ids = scoreService.batchCreate(request.getScores());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(ids));
     }
 
+    @RequireRole({"TEACHER", "ADMIN"})
     @PutMapping("/{id}")
     public ApiResponse<Score> update(@PathVariable("id") long id, @Valid @RequestBody ScoreUpdateRequestDTO request) {
         return ApiResponse.ok(scoreService.update(id, request));
     }
 
+    @RequireRole({"ADMIN"})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") long id) {
         scoreService.delete(id);

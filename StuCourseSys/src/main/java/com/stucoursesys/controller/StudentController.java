@@ -3,6 +3,7 @@ package com.stucoursesys.controller;
 import com.stucoursesys.common.ApiResponse;
 import com.stucoursesys.dto.ScoreView;
 import com.stucoursesys.entity.Student;
+import com.stucoursesys.security.RequireRole;
 import com.stucoursesys.service.ScoreService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ public class StudentController {
         this.scoreService = scoreService;
     }
 
+    @RequireRole({"TEACHER", "ADMIN"})
     @GetMapping
     public ApiResponse<List<Student>> listStudents() {
         return ApiResponse.ok(scoreService.listStudents());

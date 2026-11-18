@@ -41,6 +41,18 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.fail(ErrorCode.DUPLICATE_SCORE, ErrorCode.MSG_DUPLICATE_SCORE));
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnauthorized(UnauthorizedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.fail(ErrorCode.UNAUTHENTICATED, e.getMessage()));
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiResponse<Void>> handleForbidden(ForbiddenException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.fail(ErrorCode.FORBIDDEN, e.getMessage()));
+    }
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusiness(BusinessException e) {
         return ResponseEntity.status(e.getStatus())
